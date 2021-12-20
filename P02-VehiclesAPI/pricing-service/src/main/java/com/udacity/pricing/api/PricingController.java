@@ -12,9 +12,19 @@ import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Implements a REST-based controller for the pricing service.
- */
-@RestController
-@RequestMapping("/services/price")
+ *
+ * So how does Spring Data Rest work?
+ *
+ * At application startup, Spring Data Rest finds all of the spring data repositories
+ * Then, Spring Data Rest creates an endpoint that matches the entity name
+ * Next, Spring Data Rest appends an S to the entity name in the endpoint
+ * Lastly, Spring Data Rest exposes CRUD (Create, Read, Update, and Delete) operations as RESTful APIs over HTTP
+ *
+ *  !! No need to have a controller or a Service with Spring Data Rest
+ **/
+//http://localhost:8082/services/price?vehicleId=18
+//@RestController
+//@RequestMapping("/services/price")
 public class PricingController {
 
     /**
@@ -30,6 +40,9 @@ public class PricingController {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Price Not Found", ex);
         }
-
     }
+
+
+
+
 }

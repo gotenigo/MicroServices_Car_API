@@ -9,6 +9,14 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
+/******************
+PLEASE NOTE :
+
+ It serves as a REST WebService that simulates a backend
+ to store and retrieve the price of a given vehicle
+
+**************/
+
 /**
  * Implements the pricing service to get prices for each vehicle.
  */
@@ -21,6 +29,9 @@ public class PricingService {
             .range(1, 20)
             .mapToObj(i -> new Price("USD", randomPrice(), i))
             .collect(Collectors.toMap(Price::getVehicleId, p -> p));
+
+
+
 
     /**
      * If a valid vehicle ID, gets the price of the vehicle from the stored array.
@@ -36,6 +47,10 @@ public class PricingService {
 
         return PRICES.get(vehicleId);
     }
+
+
+
+
 
     /**
      * Gets a random price to fill in for a given vehicle ID.
