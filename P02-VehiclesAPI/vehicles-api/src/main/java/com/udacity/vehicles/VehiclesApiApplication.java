@@ -30,7 +30,7 @@ public class VehiclesApiApplication {
      * @return the car manufacturers to add to the related repository
      */
     @Bean
-    CommandLineRunner initDatabase(ManufacturerRepository repository) {
+    CommandLineRunner GGinitDatabase(ManufacturerRepository repository) {
         return args -> {
             repository.save(new Manufacturer(100, "Audi"));
             repository.save(new Manufacturer(101, "Chevrolet"));

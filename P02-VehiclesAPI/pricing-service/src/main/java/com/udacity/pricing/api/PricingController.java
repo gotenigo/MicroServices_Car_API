@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * Implements a REST-based controller for the pricing service.
+ * Implements a REST-based controller for the pricing service. So that the Pricing Service API is converted to a microservice with Spring Data REST,
+ * without the need to explicitly include code for the Controller or Service.
  *
  * So how does Spring Data Rest work?
  *

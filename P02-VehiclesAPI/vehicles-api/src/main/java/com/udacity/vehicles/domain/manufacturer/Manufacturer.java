@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
+ *
+ * http://localhost:8083/manufacturers
+ *
  * Declares class to hold car manufacturer information.
  */
 @Entity

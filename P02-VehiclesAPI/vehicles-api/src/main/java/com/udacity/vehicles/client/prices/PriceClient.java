@@ -41,6 +41,8 @@ public class PriceClient {
                     )
                     .retrieve().bodyToMono(Price.class).block();
 
+            System.out.println("... GG says :: URL being made");
+
             return String.format("%s %s", price.getCurrency(), price.getPrice());
 
         } catch (Exception e) {
