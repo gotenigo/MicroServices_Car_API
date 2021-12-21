@@ -82,7 +82,7 @@ class CarController {
          *   Update the first line as part of the above implementing.
          */
 
-        System.out.println("....................................>We are in the postMan");
+        System.out.println("....................................>We are in the post() Car");
 
         Car vcar = carService.save(car); // we save car into thr database via CarRepository that uses JPA (Crud)
 
@@ -92,7 +92,7 @@ class CarController {
 
     /**************
      *
-     * 
+     *
      {
      "id": 1,
      "condition": "USED",

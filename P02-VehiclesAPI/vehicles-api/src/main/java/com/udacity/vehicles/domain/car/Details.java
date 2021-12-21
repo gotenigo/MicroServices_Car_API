@@ -20,8 +20,9 @@ public class Details {
     @NotBlank
     private String model;
 
-    //@NotNull
-    @JoinColumn(name="name", nullable=false) // We can FK KEY link with field name of Object Manufacturer
+    //https://www.baeldung.com/jpa-join-column
+    @NotNull
+    //@JoinColumn(name="name",referencedColumnName="name",  nullable=false) // We can FK KEY link with field name of Object Manufacturer
     @ManyToOne // This annocation tells Spring to link "manufacturer" against another object called Manufacturer
     private Manufacturer manufacturer;
 
@@ -123,4 +124,23 @@ public class Details {
     public void setExternalColor(String externalColor) {
         this.externalColor = externalColor;
     }
+
+
+    @Override
+    public String toString() {
+        return "Details{" +
+                "body='" + body + '\'' +
+                ", model='" + model + '\'' +
+                ", manufacturer=" + manufacturer +
+                ", numberOfDoors=" + numberOfDoors +
+                ", fuelType='" + fuelType + '\'' +
+                ", engine='" + engine + '\'' +
+                ", mileage=" + mileage +
+                ", modelYear=" + modelYear +
+                ", productionYear=" + productionYear +
+                ", externalColor='" + externalColor + '\'' +
+                '}';
+    }
+
+
 }

@@ -90,16 +90,38 @@ public class CarService {
      * @return the new/updated car is stored in the repository
      */
     public Car save(Car car) {
+
+        System.out.println("....................................>We are in carService :: save() car");
+        System.out.println("...Car details is :\n"+car.toString());
+
+        Car vCar;
+
         if (car.getId() != null) {
+
+            System.out.println("GG.........This Car ID already Exist, So I will try to update the existing");
+
+
+            vCar= repository.save(car);
+
+            System.out.println("...==> The car saved is :\n"+vCar.toString());
+
             return repository.findById(car.getId()) // return an Optional<T>, so probably here Optional< List<Car> > so we can use map (there must be a Stream here)
                     .map(carToBeUpdated -> {    // As part of the Lambda expression .map( x -> { doDomeTHing; });  x is the object representing class T (i.e Car)
                         carToBeUpdated.setDetails(car.getDetails()); // get details from the car object being passed into param. here Details represent body + model
                         carToBeUpdated.setLocation(car.getLocation());// get Location from the car object being passed into param.  here Latitude + Longitude (rest is optional)
                         return repository.save(carToBeUpdated);
                     }).orElseThrow(CarNotFoundException::new);
+        }else {
+
+            System.out.println("GG.........I CANT find this car ID, so I will create a new one");
+
+            vCar= repository.save(car);
+
+            System.out.println("...==> The car saved is :\n"+vCar.toString());
+
+            return repository.findById(car.getId()).orElseThrow(CarNotFoundException::new);
         }
 
-        return repository.save(car);
     }
 
     /**
