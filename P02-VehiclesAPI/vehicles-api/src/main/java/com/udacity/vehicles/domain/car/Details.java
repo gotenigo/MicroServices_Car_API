@@ -2,6 +2,7 @@ package com.udacity.vehicles.domain.car;
 
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,8 +20,9 @@ public class Details {
     @NotBlank
     private String model;
 
-    @NotNull
-    @ManyToOne
+    //@NotNull
+    @JoinColumn(name="cart_id", nullable=false) // We can FK KEY link with field name of Object Manufacturer
+    @ManyToOne // This annocation tells Spring to link "manufacturer" against another object called Manufacturer
     private Manufacturer manufacturer;
 
     private Integer numberOfDoors;
@@ -36,6 +38,11 @@ public class Details {
     private Integer productionYear;
 
     private String externalColor;
+
+
+    // Constructor
+    public Details() { }
+
 
     public String getBody() {
         return body;

@@ -31,9 +31,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cars")
 class CarController {
 
+    // using the  Cart service + CarResourceAssembler to publish data
     private final CarService carService;
     private final CarResourceAssembler assembler;
 
+    //Constructor
     CarController(CarService carService, CarResourceAssembler assembler) {
         this.carService = carService;
         this.assembler = assembler;
@@ -79,7 +81,12 @@ class CarController {
          * TODO: Use the `assembler` on that saved car and return as part of the response.
          *   Update the first line as part of the above implementing.
          */
-        Resource<Car> resource = assembler.toResource(new Car());
+
+        System.out.println("...............>We are in the postMan");
+
+        Car vcar = carService.save(car); // we save car into thr database via CarRepository that uses JPA (Crud)
+
+        Resource<Car> resource = assembler.toResource(/*new Car()*/vcar);
         return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
     }
 

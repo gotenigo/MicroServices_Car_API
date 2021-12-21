@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Price {
 
     @Id
-    @Column(name = "VEHICLEID")
+    @Column(name = "VEHICLEID") // In the database, we use the name VEHICLEID and not Id as per the default Spring setup. As such, we need that setting
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long vehicleId;
 

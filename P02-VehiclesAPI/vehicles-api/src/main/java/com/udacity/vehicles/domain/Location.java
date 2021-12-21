@@ -19,16 +19,16 @@ public class Location {
     @NotNull
     private Double lon;
 
-    @Transient
+    @Transient // tell JPA framework (via Spring) to NOT push this field data into the database
     private String address;
 
-    @Transient
+    @Transient // tell JPA framework (via Spring) to NOT push this field data into the database
     private String city;
 
-    @Transient
+    @Transient // tell JPA framework (via Spring) to NOT push this field data into the database
     private String state;
 
-    @Transient
+    @Transient // tell JPA framework (via Spring) to NOT push this field data into the database
     private String zip;
 
     public Location() {

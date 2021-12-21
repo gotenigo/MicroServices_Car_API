@@ -3,7 +3,11 @@ package com.udacity.vehicles.service;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * Implements the car service create, read, update or delete
@@ -14,14 +18,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class CarService {
 
-    private final CarRepository repository;
 
-    public CarService(CarRepository repository) {
+    private final CarRepository repository;
+    private WebClient pricingWebClient;
+    private WebClient mapsWebClient;
+
+
+    public CarService(CarRepository repository, @Qualifier("maps")WebClient pricingWebClient, @Qualifier("pricing")WebClient mapsWebClient) {
         /**
          * TODO: Add the Maps and Pricing Web Clients you create
          *   in `VehiclesApiApplication` as arguments and set them here.
          */
+        //example of auto wire
+        //https://www.baeldung.com/spring-bean-names
+        //https://www.logicbig.com/tutorials/spring-framework/spring-core/inject-bean-by-name.html
         this.repository = repository;
+        this.pricingWebClient=pricingWebClient;
+        this.mapsWebClient=mapsWebClient;
     }
 
     /**
@@ -74,10 +87,10 @@ public class CarService {
      */
     public Car save(Car car) {
         if (car.getId() != null) {
-            return repository.findById(car.getId())
-                    .map(carToBeUpdated -> {
-                        carToBeUpdated.setDetails(car.getDetails());
-                        carToBeUpdated.setLocation(car.getLocation());
+            return repository.findById(car.getId()) // return an Optional<T>, so probably here Optional< List<Car> > so we can use map (there must be a Stream here)
+                    .map(carToBeUpdated -> {    // As part of the Lambda expression .map( x -> { doDomeTHing; });  x is the object representing class T (i.e Car)
+                        carToBeUpdated.setDetails(car.getDetails()); // get details from the car object being passed into param. here Details represent body + model
+                        carToBeUpdated.setLocation(car.getLocation());// get Location from the car object being passed into param.  here Latitude + Longitude (rest is optional)
                         return repository.save(carToBeUpdated);
                     }).orElseThrow(CarNotFoundException::new);
         }
