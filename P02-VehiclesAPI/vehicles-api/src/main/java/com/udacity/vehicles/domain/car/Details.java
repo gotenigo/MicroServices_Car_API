@@ -21,7 +21,7 @@ public class Details {
     private String model;
 
     //@NotNull
-    @JoinColumn(name="cart_id", nullable=false) // We can FK KEY link with field name of Object Manufacturer
+    @JoinColumn(name="name", nullable=false) // We can FK KEY link with field name of Object Manufacturer
     @ManyToOne // This annocation tells Spring to link "manufacturer" against another object called Manufacturer
     private Manufacturer manufacturer;
 

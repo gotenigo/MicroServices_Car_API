@@ -65,7 +65,7 @@ class CarController {
          * TODO: Use the `assembler` on that car and return the resulting output.
          *   Update the first line as part of the above implementing.
          */
-        return assembler.toResource(new Car());
+        return assembler.toResource(/*new Car()*/carService.getCarView());
     }
 
     /**
@@ -82,13 +82,55 @@ class CarController {
          *   Update the first line as part of the above implementing.
          */
 
-        System.out.println("...............>We are in the postMan");
+        System.out.println("....................................>We are in the postMan");
 
         Car vcar = carService.save(car); // we save car into thr database via CarRepository that uses JPA (Crud)
 
-        Resource<Car> resource = assembler.toResource(/*new Car()*/vcar);
+        Resource<Car> resource = assembler.toResource(vcar/*new Car()*/);
         return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
     }
+
+    /**************
+     *
+     * 
+     {
+     "id": 1,
+     "condition": "USED",
+     "details": {
+     "body": "sport",
+     "model": "Z4",
+     "manufacturer": {
+     "code": 103,
+     "name": "BMW"
+     },
+     "numberOfDoors": 2,
+     "fuelType": "Gasoline",
+     "engine": "3.6L V6",
+     "mileage": 32280,
+     "modelYear": 2018,
+     "productionYear": 2018,
+     "externalColor": "white"
+     },
+     "location": {
+     "lat": 40.73061,
+     "lon": -73.935242,
+     "address": "13 adela avenue",
+     "city": "London",
+     "state": "New malden",
+     "zip": "KT36LF"
+     },
+     "price": 13253
+     }
+
+
+     * */
+
+
+
+
+
+
+
 
     /**
      * Updates the information of a vehicle in the system.
