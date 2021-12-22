@@ -22,6 +22,7 @@ public class Car {
     private Long id;
 
     @CreatedDate
+    @Column(updatable=false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate

@@ -60,7 +60,11 @@ public class CarService {
          *   If it does not exist, throw a CarNotFoundException
          *   Remove the below code as part of your implementation.
          */
-        Car car = new Car();
+        Car car = null;
+
+
+        repository.findById(id).orElseThrow(CarNotFoundException::new);
+
 
         /**
          * TODO: Use the Pricing Web client you create in `VehiclesApiApplication`
@@ -98,17 +102,18 @@ public class CarService {
 
         if (car.getId() != null) {
 
-            System.out.println("GG.........This Car ID already Exist, So I will try to update the existing");
-
-
-            vCar= repository.save(car);
-
-            System.out.println("...==> The car saved is :\n"+vCar.toString());
+            System.out.println("GG.........CardID provided, So I will try to update wha twe have");
+            System.out.println("GG.........Please note!!! Only car details + Location would be Updated !");
 
             return repository.findById(car.getId()) // return an Optional<T>, so probably here Optional< List<Car> > so we can use map (there must be a Stream here)
                     .map(carToBeUpdated -> {    // As part of the Lambda expression .map( x -> { doDomeTHing; });  x is the object representing class T (i.e Car)
                         carToBeUpdated.setDetails(car.getDetails()); // get details from the car object being passed into param. here Details represent body + model
                         carToBeUpdated.setLocation(car.getLocation());// get Location from the car object being passed into param.  here Latitude + Longitude (rest is optional)
+
+                        System.out.println("...==> car details provided for update:\n"+car.getDetails());
+                        System.out.println("...==> The Location provided for update :\n"+car.getLocation());
+                        System.out.println("...==> The car to be saved is :\n"+carToBeUpdated.toString());
+
                         return repository.save(carToBeUpdated);
                     }).orElseThrow(CarNotFoundException::new);
         }else {
@@ -117,9 +122,16 @@ public class CarService {
 
             vCar= repository.save(car);
 
-            System.out.println("...==> The car saved is :\n"+vCar.toString());
+            if ( vCar!= null ){
 
-            return repository.findById(car.getId()).orElseThrow(CarNotFoundException::new);
+               System.out.println("...==> The car saved is :\n"+vCar.toString());
+
+               return vCar;
+            }else{
+
+                throw new CarNotFoundException(); // Throw critical error
+            }
+
         }
 
     }
