@@ -28,6 +28,10 @@ public class CarService {
     private WebClient mapsWebClient;
 
 
+
+
+
+
     public CarService(CarRepository repository, @Qualifier("maps")WebClient pricingWebClient, @Qualifier("pricing")WebClient mapsWebClient) {
         /**
          * TODO: Add the Maps and Pricing Web Clients you create
@@ -41,6 +45,11 @@ public class CarService {
         this.mapsWebClient=mapsWebClient;
     }
 
+
+
+
+
+
     /**
      * Gathers a list of all vehicles
      * @return a list of all vehicles in the CarRepository
@@ -48,6 +57,12 @@ public class CarService {
     public List<Car> list() {
         return repository.findAll();
     }
+
+
+
+
+
+
 
     /**
      * Gets car information by ID (or throws exception if non-existent)
@@ -87,6 +102,18 @@ public class CarService {
 
         return car;
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Either creates or updates a vehicle, based on prior existence of car
@@ -136,6 +163,20 @@ public class CarService {
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Deletes a given car by ID
      * @param id the ID number of the car to delete
@@ -155,6 +196,16 @@ public class CarService {
     }
 
 
+
+
+
+
+
+
+
+
+
+    
 
     /**
      * Creates an example Car object for use in testing.
