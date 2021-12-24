@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -28,6 +30,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
+//@ApiResponse is used  by swagger to customize the default response
+@ApiResponses(value = {
+        @ApiResponse(code=400, message = "This is a bad request, please follow the API documentation for the proper request format."),
+        @ApiResponse(code=401, message = "Due to security constraints, your access request cannot be authorized. "),
+        @ApiResponse(code=500, message = "The server is down. Please make sure that the Location microservice is running.")
+})
 
 //consumes = "application/json"
 /**
