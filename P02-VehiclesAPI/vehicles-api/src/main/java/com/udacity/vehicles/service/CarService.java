@@ -39,7 +39,7 @@ public class CarService {
 
     //https://www.amitph.com/introduction-to-spring-webclient/
     //https://howtodoinjava.com/spring-webflux/webclient-get-post-example/
-    public CarService(CarRepository repository, @Qualifier("maps")WebClient pricingWebClient, @Qualifier("pricing")WebClient mapsWebClient, ModelMapper modelMapper) {
+    public CarService(CarRepository repository, @Qualifier("pricing")WebClient pricingWebClient, @Qualifier("maps")WebClient mapsWebClient, ModelMapper modelMapper) {
         /**
          * TODO: Add the Maps and Pricing Web Clients you create
          *   in `VehiclesApiApplication` as arguments and set them here.
