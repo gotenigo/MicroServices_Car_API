@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -32,8 +33,9 @@ import org.springframework.web.reactive.function.client.WebClient;
  * Read more here : https://medium.com/@manika09singh/enable-auditing-using-spring-data-jpa-2f62587ccb23
  *
  *****/
-//@EnableDiscoveryClient // not needed as we are looking to use Ribbon backed Rest Query
-//@EnableFeignClients
+//@EnableEurekaClient
+@EnableDiscoveryClient // not needed as we are looking to use Ribbon backed Rest Query
+@EnableFeignClients // not needed as we are looking to use Ribbon backed Rest Query
 @SpringBootApplication
 @EnableJpaAuditing
 public class VehiclesApiApplication {

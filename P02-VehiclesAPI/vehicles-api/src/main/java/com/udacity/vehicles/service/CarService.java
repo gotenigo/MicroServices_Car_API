@@ -2,6 +2,7 @@ package com.udacity.vehicles.service;
 
 import com.udacity.vehicles.client.maps.MapsClient;
 import com.udacity.vehicles.client.prices.Price;
+import com.udacity.vehicles.client.prices.PriceClient;
 import com.udacity.vehicles.domain.Condition;
 import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
@@ -28,12 +29,8 @@ public class CarService {
 
 
     private final CarRepository repository;
-    private WebClient pricingWebClient;
     private MapsClient mapsClient;
-    //private WebClient mapsWebClient;
-
-
-
+    private PriceClient priceClient;
 
 
 
@@ -48,9 +45,9 @@ public class CarService {
         //https://www.baeldung.com/spring-bean-names
         //https://www.logicbig.com/tutorials/spring-framework/spring-core/inject-bean-by-name.html
         this.repository = repository;
-        this.pricingWebClient=pricingWebClient;
-        //this.mapsWebClient=mapsWebClient;
+        this.priceClient= new PriceClient(pricingWebClient);
         this.mapsClient = new MapsClient(mapsWebClient, modelMapper);
+        //this.pricingWebClient=pricingWebClient;
 
     }
 
@@ -107,17 +104,20 @@ public class CarService {
         //http://localhost:8082/services/price/4
         //http://localhost:8082/services/price/search/findPriceByVehicleId?vehicleId=1
         //................................................................................
-        Price price = pricingWebClient.get()
+        /*Price price = pricingWebClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/services/price/"+id)
                         //.queryParam("vehicleId", id)
                         .build())
                 .retrieve()
                 .bodyToMono(Price.class)
-                .block();
+                .block();*/
+
+
+        String price = priceClient.getPrice(id );
 
         // Combine the monos: when they are both done, take the
         // data from each and combine it into a User object.
-        car.setPrice(price.getPrice().toString());
+        car.setPrice(price);
 
 
         /**
@@ -170,7 +170,7 @@ public class CarService {
             return repository.findById(car.getId()) // return an Optional<T>, so probably here Optional< List<Car> > so we can use map (there must be a Stream here)
                     .map(carToBeUpdated -> {    // As part of the Lambda expression .map( x -> { doDomeTHing; });  x is the object representing class T (i.e Car)
                         carToBeUpdated.setDetails(car.getDetails()); // get details from the car object being passed into param. here Details represent body + model
-                        carToBeUpdated.setLocation(car.getLocation());// get Location from the car object being passed into param.  here Latitude + Longitude (rest is optional)
+                        carToBeUpdated.setLocation(car.getLocation());// get Location from the car object being passed into param.  here Latitude + Longitude (rest is optional as it is managed the MapService app)
 
                         System.out.println("...==> car details provided for update:\n"+car.getDetails());
                         System.out.println("...==> The Location provided for update :\n"+car.getLocation());
@@ -222,10 +222,14 @@ public class CarService {
          *   If it does not exist, throw a CarNotFoundException
          */
 
+        Car car = repository.findById(id).orElseThrow(CarNotFoundException::new);
 
         /**
          * TODO: Delete the car from the repository.
          */
+        System.out.println("....................................->trying tp delete in Service the car : "+car.toString());
+
+        repository.deleteById(car.getId());
 
 
     }

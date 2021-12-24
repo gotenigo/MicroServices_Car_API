@@ -177,7 +177,13 @@ class CarController {
          * TODO: Use the `assembler` on that updated car and return as part of the response.
          *   Update the first line as part of the above implementing.
          */
-        Resource<Car> resource = assembler.toResource(new Car());
+
+        System.out.println("....................................>We are in the put() Car");
+
+        car.setId(id);
+        carService.save(car); // we save car into thr database via CarRepository that uses JPA (Crud)
+
+        Resource<Car> resource = assembler.toResource(car);
         return ResponseEntity.ok(resource);
     }
 
@@ -194,6 +200,11 @@ class CarController {
         /**
          * TODO: Use the Car Service to delete the requested vehicle.
          */
+
+        System.out.println("....................................>We are in the delete() Car");
+
+        carService.delete(id);
+
         return ResponseEntity.noContent().build();
     }
 }
