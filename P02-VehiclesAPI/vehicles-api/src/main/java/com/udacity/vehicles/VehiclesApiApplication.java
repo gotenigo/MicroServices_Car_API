@@ -75,6 +75,10 @@ public class VehiclesApiApplication {
      * Compared to RestTemplate, this client has a more functional feel and is fully reactive.
      * You can create your own client instance with the builder, WebClient.create()
      *
+     * That is because, the WebClient provides three different ways to build a WebClient :
+     *  1) use WebClient.create();
+     *  2) use webClientBuilder();
+     *
      * Web Client for the maps (location) API
      * @param endpoint where to communicate for the maps API
      * @return created maps endpoint
@@ -89,9 +93,13 @@ public class VehiclesApiApplication {
 
     /**
      * //https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/boot-features-webclient.html
-     *If you have Spring WebFlux on your classpath, you can also choose to use WebClient to call remote REST services.
-     *Compared to RestTemplate, this client has a more functional feel and is fully reactive.
-     *You can create your own client instance with the builder, WebClient.create()
+     * If you have Spring WebFlux on your classpath, you can also choose to use WebClient to call remote REST services.
+     * Compared to RestTemplate, this client has a more functional feel and is fully reactive.
+     * You can create your own client instance with the builder, WebClient.create()
+     *
+     * That is because, the WebClient provides three different ways to build a WebClient :
+     *  1) use WebClient.create();
+     *  2) use webClientBuilder();
      *
      * Web Client for the pricing API
      * @param endpoint where to communicate for the pricing API

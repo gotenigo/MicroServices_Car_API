@@ -1,5 +1,6 @@
 package com.udacity.pricing.domain.price;
 
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -18,8 +19,10 @@ import java.util.stream.Stream;
 public interface PriceRepository extends CrudRepository<Price, Long> {
 
 
-    @Query(value ="select d.vehicleId, d.currency, d.price from Price d where d.vehicleId = :vehicleId")
-    Price findPriceByVehicleId( @Param("vehicleId") Long vehicleId);
+    // "http://localhost:8082/services/price/search/findPriceByVehicleId{?vehicleId}"
+    //http://localhost:8082/services/price/search/findPriceByVehicleId?vehicleId=1
+    //@Query(value ="select d.vehicleId, d.currency, d.price from Price d where d.vehicleId = :vehicleId")
+    Price findPriceByVehicleId( @Param("vehicleId") Long vehicleId); // http://localhost:8082/services/price/4
 
     @Query(value ="select d.vehicleId, d.currency, d.price from Price d")
     //@RestResource(path = "test") // http://localhost:8082/services/search/test

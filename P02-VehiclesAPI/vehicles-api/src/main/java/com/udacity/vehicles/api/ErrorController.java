@@ -33,5 +33,7 @@ public class ErrorController extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(DEFAULT_VALIDATION_FAILED_MESSAGE, errors);
         return handleExceptionInternal(ex, apiError, headers, HttpStatus.BAD_REQUEST, request);
     }
+
+
 }
 

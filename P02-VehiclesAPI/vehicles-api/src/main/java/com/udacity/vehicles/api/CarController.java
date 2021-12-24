@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +25,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+//consumes = "application/json"
 /**
  * Implements a REST-based controller for the Vehicles API.
  */
+//@PostMapping(path = "/pets", consumes = "application/json")
 @RestController
-@RequestMapping("/cars")
+@RequestMapping(path="/cars" , produces = { "application/json" } ) // consume all Media TYpe
 class CarController {
+
 
     // using the  Cart service + CarResourceAssembler to publish data
     private final CarService carService;
@@ -40,6 +44,11 @@ class CarController {
         this.carService = carService;
         this.assembler = assembler;
     }
+
+
+
+
+
 
     /**
      * Creates a list to store any vehicles.
@@ -53,11 +62,23 @@ class CarController {
                 linkTo(methodOn(CarController.class).list()).withSelfRel());
     }
 
+
+
+
+
+
+
     /**
      * Gets information of a specific car by ID.
      * @param id the id number of the given vehicle
      * @return all information for the requested vehicle
      */
+    //You can also change the Media Type supported on your GET
+    // Look more here https://stackoverflow.com/questions/57970995/can-spring-boot-controller-receive-plain-text
+    //https://stackoverflow.com/questions/57970995/can-spring-boot-controller-receive-plain-text
+    //pring supports all media types as per the IANA https://www.iana.org/assignments/media-types/media-types.xhtml the problem lies only with the curl command as quoted by others.
+    //https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc
+    //https://www.baeldung.com/spring-requestmapping
     @GetMapping("/{id}")
     Resource<Car> get(@PathVariable Long id) {
         /**
@@ -65,8 +86,14 @@ class CarController {
          * TODO: Use the `assembler` on that car and return the resulting output.
          *   Update the first line as part of the above implementing.
          */
-        return assembler.toResource(/*new Car()*/carService.getCarView());
+        System.out.println("...GG dit are inside GEt  car per Id : "+id);
+        return assembler.toResource(carService.findById(id)/*carService.getCarView()*/);
     }
+
+
+
+
+
 
     /**
      * Posts information to create a new vehicle in the system.
@@ -89,6 +116,10 @@ class CarController {
         Resource<Car> resource = assembler.toResource(vcar/*new Car()*/);
         return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
     }
+
+
+
+
 
     /**************
      *
@@ -149,6 +180,9 @@ class CarController {
         Resource<Car> resource = assembler.toResource(new Car());
         return ResponseEntity.ok(resource);
     }
+
+
+
 
     /**
      * Removes a vehicle from the system.

@@ -1,5 +1,7 @@
 package com.udacity.vehicles.service;
 
+import com.udacity.vehicles.client.maps.MapsClient;
+import com.udacity.vehicles.client.prices.Price;
 import com.udacity.vehicles.domain.Condition;
 import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
@@ -8,10 +10,12 @@ import java.util.List;
 
 import com.udacity.vehicles.domain.car.Details;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 /**
  * Implements the car service create, read, update or delete
@@ -25,14 +29,17 @@ public class CarService {
 
     private final CarRepository repository;
     private WebClient pricingWebClient;
-    private WebClient mapsWebClient;
+    private MapsClient mapsClient;
+    //private WebClient mapsWebClient;
 
 
 
 
 
 
-    public CarService(CarRepository repository, @Qualifier("maps")WebClient pricingWebClient, @Qualifier("pricing")WebClient mapsWebClient) {
+    //https://www.amitph.com/introduction-to-spring-webclient/
+    //https://howtodoinjava.com/spring-webflux/webclient-get-post-example/
+    public CarService(CarRepository repository, @Qualifier("maps")WebClient pricingWebClient, @Qualifier("pricing")WebClient mapsWebClient, ModelMapper modelMapper) {
         /**
          * TODO: Add the Maps and Pricing Web Clients you create
          *   in `VehiclesApiApplication` as arguments and set them here.
@@ -42,7 +49,9 @@ public class CarService {
         //https://www.logicbig.com/tutorials/spring-framework/spring-core/inject-bean-by-name.html
         this.repository = repository;
         this.pricingWebClient=pricingWebClient;
-        this.mapsWebClient=mapsWebClient;
+        //this.mapsWebClient=mapsWebClient;
+        this.mapsClient = new MapsClient(mapsWebClient, modelMapper);
+
     }
 
 
@@ -76,9 +85,11 @@ public class CarService {
          *   Remove the below code as part of your implementation.
          */
         Car car = null;
+        // Load some user data asynchronously, e.g. from a DB:
 
 
-        repository.findById(id).orElseThrow(CarNotFoundException::new);
+
+        car = repository.findById(id).orElseThrow(CarNotFoundException::new);
 
 
         /**
@@ -87,7 +98,26 @@ public class CarService {
          * TODO: Set the price of the car
          * Note: The car class file uses @transient, meaning you will need to call
          *   the pricing service each time to get the price.
-         */
+         **/
+        //http://localhost:8082/services/price?vehicleId=18
+        // BEST : https://reflectoring.io/spring-webclient/
+        //we can handle requests by weaving transforms around our Mono or Flux values, to handle and combine values as they’re returned,
+        // and then pass these Flux-wrapped values into other non-blocking APIs, all fully asynchronously.
+        //................................................................................
+        //http://localhost:8082/services/price/4
+        //http://localhost:8082/services/price/search/findPriceByVehicleId?vehicleId=1
+        //................................................................................
+        Price price = pricingWebClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/services/price/"+id)
+                        //.queryParam("vehicleId", id)
+                        .build())
+                .retrieve()
+                .bodyToMono(Price.class)
+                .block();
+
+        // Combine the monos: when they are both done, take the
+        // data from each and combine it into a User object.
+        car.setPrice(price.getPrice().toString());
 
 
         /**
@@ -99,6 +129,11 @@ public class CarService {
          * meaning the Maps service needs to be called each time for the address.
          */
 
+
+        Double lat = car.getLocation().getLat();
+        Double lon = car.getLocation().getLon();
+        Location location = mapsClient.getAddress(new Location(lat, lon) );
+        car.setLocation(location);
 
         return car;
     }
