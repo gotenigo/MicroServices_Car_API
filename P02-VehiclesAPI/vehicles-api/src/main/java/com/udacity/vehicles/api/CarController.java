@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
@@ -38,6 +42,9 @@ class CarController {
     // using the  Cart service + CarResourceAssembler to publish data
     private final CarService carService;
     private final CarResourceAssembler assembler;
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
     //Constructor
     CarController(CarService carService, CarResourceAssembler assembler) {
@@ -207,4 +214,28 @@ class CarController {
 
         return ResponseEntity.noContent().build();
     }
+
+
+
+
+    //Test out the DiscoveryClient functionality
+    @GetMapping("/service-instances/{applicationName}")
+    public List<ServiceInstance> serviceInstancesByApplicationName(
+            @PathVariable String applicationName) {
+        return this.discoveryClient.getInstances(applicationName);
+    }
+
+
+
+    //Test out the DiscoveryClient functionality
+    @GetMapping("/service-instances")
+    public List<String> serviceInstances() {
+        return this.discoveryClient.getServices();
+    }
+
+
+
+
+
+
 }

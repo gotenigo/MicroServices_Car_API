@@ -3,13 +3,17 @@ package com.udacity.vehicles;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.domain.manufacturer.ManufacturerRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.cloud.client.loadbalancer.reactive.LoadBalancerExchangeFilterFunction;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -33,9 +37,9 @@ import org.springframework.web.reactive.function.client.WebClient;
  * Read more here : https://medium.com/@manika09singh/enable-auditing-using-spring-data-jpa-2f62587ccb23
  *
  *****/
-//@EnableEurekaClient
-@EnableDiscoveryClient // not needed as we are looking to use Ribbon backed Rest Query
-@EnableFeignClients // not needed as we are looking to use Ribbon backed Rest Query
+@EnableEurekaClient // we register that service with Eureka for flexibility purpose. ALthough its not required
+@EnableDiscoveryClient
+// not needed as we are looking to use Ribbon backed Rest Query //https://examples.javacodegeeks.com/enterprise-java/spring/spring-cloud-feign-client-example/
 @SpringBootApplication
 @EnableJpaAuditing
 public class VehiclesApiApplication {
@@ -85,11 +89,19 @@ public class VehiclesApiApplication {
      * @param endpoint where to communicate for the maps API
      * @return created maps endpoint
      */
-    @LoadBalanced // Tell Spring Cloud to create a Ribbon backed  ResTemplate class
+    //https://spring.getdocs.org/en-US/spring-cloud-docs/spring-cloud-commons/cloud-native-applications/spring-cloud-commons:-common-abstractions/webclinet-loadbalancer-client.html
+    //LoadBalancer is not activated with Webclient by default
+    //@LoadBalanced // Tell Spring Cloud to create a Ribbon backed  ResTemplate class
     @Bean(name="maps")
-    public WebClient webClientMaps(@Value("${maps.endpoint}") String endpoint) {
-        return WebClient.create(endpoint);
+    public WebClient webClientMaps(@Value("${maps.endpoint}") String endpoint, LoadBalancerClient lbClient) {
+
+        return WebClient
+                .builder()
+                .baseUrl(endpoint)
+                .filter(new LoadBalancerExchangeFilterFunction(lbClient))
+                .build();
     }
+
 
 
 
@@ -107,10 +119,19 @@ public class VehiclesApiApplication {
      * @param endpoint where to communicate for the pricing API
      * @return created pricing endpoint
      */
-    @LoadBalanced // Tell Spring Cloud to create a Ribbon backed  ResTemplate class
+    //https://spring.getdocs.org/en-US/spring-cloud-docs/spring-cloud-commons/cloud-native-applications/spring-cloud-commons:-common-abstractions/webclinet-loadbalancer-client.html
+    //LoadBalancer is not activated with Webclient by default
+    //@LoadBalanced // Tell Spring Cloud to create a Ribbon backed  ResTemplate class
     @Bean(name="pricing")
-    public WebClient webClientPricing(@Value("${pricing.endpoint}") String endpoint) {
-        return WebClient.create(endpoint);
+    public WebClient webClientPricing(@Value("${pricing.endpoint}") String endpoint, LoadBalancerClient lbClient) {
+
+        return WebClient
+                .builder()
+                .baseUrl(endpoint)
+                .filter(new LoadBalancerExchangeFilterFunction(lbClient))
+                .build();
     }
+
+
 
 }
