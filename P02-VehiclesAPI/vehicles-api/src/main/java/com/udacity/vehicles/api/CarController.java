@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Implements a REST-based controller for the Vehicles API.
  */
-//@PostMapping(path = "/pets", consumes = "application/json")
+
 @RestController
 @RequestMapping(path="/cars" , produces = { "application/json" } ) // consume all Media TYpe
 class CarController {
@@ -73,8 +73,14 @@ class CarController {
      */
     @GetMapping
     Resources<Resource<Car>> list() {
-        List<Resource<Car>> resources = carService.list().stream().map(assembler::toResource)
+
+        List<Car> carList =carService.list();
+
+        List<Resource<Car>> resources = carList.stream().map(assembler::toResource)
                 .collect(Collectors.toList());
+
+        System.out.println("...GG says, the list is ="+ carList );
+
         return new Resources<>(resources,
                 linkTo(methodOn(CarController.class).list()).withSelfRel());
     }

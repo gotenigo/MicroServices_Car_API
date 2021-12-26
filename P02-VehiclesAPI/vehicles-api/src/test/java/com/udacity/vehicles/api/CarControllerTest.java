@@ -1,9 +1,17 @@
 package com.udacity.vehicles.api;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+
+import com.udacity.vehicles.domain.manufacturer.ManufacturerRepository;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,12 +32,18 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,20 +51,35 @@ import org.springframework.test.web.servlet.MockMvc;
 /**
  * Implements testing of the CarController class.
  */
+// define the runnerclass to run the Test case. here, we are using SPing runner.
+// THis is a great choice as we are using SPing to run the application
 @RunWith(SpringRunner.class)
-@SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureJsonTesters
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+/*@MockBean(JpaMetamodelMappingContext.class)
+@MockBean(CarResourceAssembler.class)
+@MockBean(DiscoveryClient.class)
+@MockBean(ManufacturerRepository.class)
+@MockBean(LoadBalancerClient.class)
+@MockBean(AuditingHandler.class)*/
+//@WebMvcTest(CarController.class) //@WebMvcTest is used for controller layer unit testing.
 public class CarControllerTest {
 
+    //@LocalServerPort
+    //private int port;
+
     @Autowired
-    private MockMvc mvc;
+    private MockMvc mvc; // TO test a HTTP Controller without starting a Full HTTP server
+
 
     @Autowired
     private JacksonTester<Car> json;
 
     @MockBean
     private CarService carService;
+
 
     @MockBean
     private PriceClient priceClient;
@@ -82,7 +111,7 @@ public class CarControllerTest {
                         .content(json.write(car).getJson())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated()); // We check/set the expectation to validate test
     }
 
     /**
@@ -95,7 +124,18 @@ public class CarControllerTest {
          * TODO: Add a test to check that the `get` method works by calling
          *   the whole list of vehicles. This should utilize the car from `getCar()`
          *   below (the vehicle will be the first in the list).
-         */
+         **/
+
+        mvc.perform(get("/cars/"))
+                .andExpect(status().isOk())  // We check/set the expection to validate test
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+                //.andExpect(content().json("[]"));
+
+        verify(carService, times(1)).list(); // Check list is called OK
+        Car carRestaured = getCar();
+        carRestaured.setId(1L);   // needed to restaure Car ID, otherwise it will be null
+        assertThat(carService.list().get(0).toString(), equalTo( carRestaured.toString()) ); // check value are the same
+
 
     }
 
@@ -109,6 +149,15 @@ public class CarControllerTest {
          * TODO: Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
+
+        mvc.perform(get("/cars/1"))
+                .andExpect(status().isOk())  // We check/set the expection to validate test
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+        //.andExpect(content().json("[]"));
+
+        verify(carService, times(1)).findById(1L); // Check findById is called OK
+
+
     }
 
     /**
@@ -122,6 +171,12 @@ public class CarControllerTest {
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
+
+        mvc.perform(delete("/cars/1"))
+                .andExpect(status().isNoContent());  // We check/set the expection to validate test
+
+        verify(carService, times(1)).delete(1L); // Check delete is called OK
+
     }
 
     /**
