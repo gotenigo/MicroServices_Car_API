@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 
 //@MockBean works well with the Mockito library.
 //@WebMvcTest is used for controller layer unit testing.
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@SpringBootTest
 @RunWith(SpringRunner.class)
 public class VehiclesApiApplicationTests {
@@ -64,5 +64,6 @@ public class VehiclesApiApplicationTests {
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
+
 
 }
