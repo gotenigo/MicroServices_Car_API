@@ -1,5 +1,10 @@
 package com.udacity.vehicles;
 
+import com.udacity.vehicles.domain.Condition;
+import com.udacity.vehicles.domain.Location;
+import com.udacity.vehicles.domain.car.Car;
+import com.udacity.vehicles.domain.car.CarRepository;
+import com.udacity.vehicles.domain.car.Details;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.domain.manufacturer.ManufacturerRepository;
 import org.modelmapper.ModelMapper;
@@ -53,17 +58,19 @@ public class VehiclesApiApplication {
 
     /**
      * Initializes the car manufacturers available to the Vehicle API.
-     * @param repository where the manufacturer information persists.
+     * @param manufRrepository where the manufacturer information persists.
      * @return the car manufacturers to add to the related repository
      */
     @Bean
-    CommandLineRunner GGinitDatabase(ManufacturerRepository repository) {
+    CommandLineRunner GGinitDatabase(ManufacturerRepository manufRrepository, CarRepository carRepository) {
         return args -> {
-            repository.save(new Manufacturer(100, "Audi"));
-            repository.save(new Manufacturer(101, "Chevrolet"));
-            repository.save(new Manufacturer(102, "Ford"));
-            repository.save(new Manufacturer(103, "BMW"));
-            repository.save(new Manufacturer(104, "Dodge"));
+            manufRrepository.save(new Manufacturer(100, "Audi"));
+            manufRrepository.save(new Manufacturer(101, "Chevrolet"));
+            manufRrepository.save(new Manufacturer(102, "Ford"));
+            manufRrepository.save(new Manufacturer(103, "BMW"));
+            manufRrepository.save(new Manufacturer(104, "Dodge"));
+
+            carRepository.save(getCar());
         };
     }
 
@@ -132,6 +139,31 @@ public class VehiclesApiApplication {
                 .build();
     }
 
+
+
+    /**
+     * Creates an example Car object for use in testing.
+     * @return an example Car object
+     */
+    public Car getCar() {
+        Car car = new Car();
+        car.setLocation(new Location(10.730610, -23.935242));
+        Details details = new Details();
+        Manufacturer manufacturer = new Manufacturer(103, "BMW");
+        details.setManufacturer(manufacturer);
+        details.setModel("Z4");
+        details.setMileage(32280);
+        details.setExternalColor("black");
+        details.setBody("sedan");
+        details.setEngine("3.6L V6");
+        details.setFuelType("Gasoline");
+        details.setModelYear(2018);
+        details.setProductionYear(2018);
+        details.setNumberOfDoors(4);
+        car.setDetails(details);
+        car.setCondition(Condition.NEW);
+        return car;
+    }
 
 
 }

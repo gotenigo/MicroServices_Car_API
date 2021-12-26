@@ -127,13 +127,13 @@ public class CarControllerTest {
          **/
 
         mvc.perform(get("/cars/"))
-                .andExpect(status().isOk())  // We check/set the expection to validate test
+                .andExpect(status().isOk())  // We check/set the expectation to validate test
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
                 //.andExpect(content().json("[]"));
 
         verify(carService, times(1)).list(); // Check list is called OK
         Car carRestaured = getCar();
-        carRestaured.setId(1L);   // needed to restaure Car ID, otherwise it will be null
+        carRestaured.setId(1L);   // needed to restore Car ID, otherwise it will be null
         assertThat(carService.list().get(0).toString(), equalTo( carRestaured.toString()) ); // check value are the same
 
 
@@ -151,7 +151,7 @@ public class CarControllerTest {
          */
 
         mvc.perform(get("/cars/1"))
-                .andExpect(status().isOk())  // We check/set the expection to validate test
+                .andExpect(status().isOk())  // We check/set the expectation to validate test
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
         //.andExpect(content().json("[]"));
 
@@ -173,7 +173,7 @@ public class CarControllerTest {
          */
 
         mvc.perform(delete("/cars/1"))
-                .andExpect(status().isNoContent());  // We check/set the expection to validate test
+                .andExpect(status().isNoContent());  // We check/set the expectation to validate test
 
         verify(carService, times(1)).delete(1L); // Check delete is called OK
 
