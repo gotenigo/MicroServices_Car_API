@@ -27,17 +27,24 @@ import static org.junit.Assert.assertThat;
 
 //@MockBean works well with the Mockito library.
 //@WebMvcTest is used for controller layer unit testing.
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // define the
-@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) 
 //@SpringBootTest
+@RunWith(SpringRunner.class)
 public class VehiclesApiApplicationTests {
-/*
-    @Bean
+
+
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
+        objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         return objectMapper;
-    }*/
+    }
+
+
+    @LocalServerPort
+    private int port;
+
 
 
     @Test
@@ -45,42 +52,17 @@ public class VehiclesApiApplicationTests {
     }
 
 
-    @LocalServerPort
-    private int port;
-
-    @Autowired // auto provided by Springboot and allow us to consume Rest Api
-    private TestRestTemplate restTemplate;
-
-
-
-
-
-
     @Test
     public void getAllCars() throws Exception {
 
-        //https://stackoverflow.com/questions/9381665/how-can-we-configure-the-internal-jackson-mapper-when-using-resttemplate
-        //https://stackoverflow.com/questions/31753708/spring-resttemplate-and-json-how-to-ignore-empty-arrays-deserialization
-
-
-        ObjectMapper ojectMapper = new ObjectMapper();
-        ojectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
-        ojectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-        ojectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-
-        RestTemplate template = new RestTemplateBuilder()
-                .additionalMessageConverters(new MappingJackson2HttpMessageConverter(ojectMapper ))
+        RestTemplate restTemplate = new RestTemplateBuilder()
+                .additionalMessageConverters(new MappingJackson2HttpMessageConverter( objectMapper() ))
                 .build();
 
         @SuppressWarnings("unchecked")
-        ResponseEntity<List<Object>> response =    template.exchange("http://localhost:" + port + "/cars", HttpMethod.GET, null, new   ParameterizedTypeReference<List<Object>>() {});
-        //ResponseEntity<List<Car>> response = restTemplate.exchange("http://localhost:" + port + "/cars", myBean);
+        ResponseEntity<List<Object>> response =    restTemplate.exchange("http://localhost:" + port + "/cars", HttpMethod.GET, null, new   ParameterizedTypeReference<List<Object>>() {});
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
-
-
-
-
 
 }
