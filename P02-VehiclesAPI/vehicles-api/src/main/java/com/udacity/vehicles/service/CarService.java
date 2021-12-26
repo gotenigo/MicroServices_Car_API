@@ -144,8 +144,8 @@ public class CarService {
      */
     public Car save(Car car) {
 
-        System.out.println("....................................>We are in carService :: save() car");
-        System.out.println("...Car details is :\n"+car.toString());
+        System.out.println("=>...We are in carService :: save() car");
+        System.out.println("=>...Car details is :\n"+car.toString());
 
         Car vCar;
 
@@ -214,7 +214,7 @@ public class CarService {
         /**
          * TODO: Delete the car from the repository.
          */
-        System.out.println("=>....................................->trying tp delete in Service the car : "+car.toString());
+        System.out.println("=>.....................->trying tp delete in Service the car : "+car.toString());
 
         repository.deleteById(car.getId());
 

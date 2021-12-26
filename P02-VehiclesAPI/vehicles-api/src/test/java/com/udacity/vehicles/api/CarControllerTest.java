@@ -132,9 +132,9 @@ public class CarControllerTest {
                 //.andExpect(content().json("[]"));
 
         verify(carService, times(1)).list(); // Check list is called OK
-        Car carRestaured = getCar();
-        carRestaured.setId(1L);   // needed to restore Car ID, otherwise it will be null
-        assertThat(carService.list().get(0).toString(), equalTo( carRestaured.toString()) ); // check value are the same
+        Car carRestored = getCar();
+        carRestored.setId(1L);   // needed to restore Car ID, otherwise it will be null
+        assertThat(carService.list().get(0).toString(), equalTo( carRestored.toString()) ); // check value are the same
 
 
     }

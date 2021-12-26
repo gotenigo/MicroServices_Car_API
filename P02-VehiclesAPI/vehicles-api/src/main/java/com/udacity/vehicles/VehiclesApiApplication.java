@@ -42,9 +42,8 @@ import org.springframework.web.reactive.function.client.WebClient;
  * Read more here : https://medium.com/@manika09singh/enable-auditing-using-spring-data-jpa-2f62587ccb23
  *
  *****/
-@EnableEurekaClient // we register that service with Eureka for flexibility purpose. ALthough its not required
-@EnableDiscoveryClient
-// not needed as we are looking to use Ribbon backed Rest Query //https://examples.javacodegeeks.com/enterprise-java/spring/spring-cloud-feign-client-example/
+//@EnableEurekaClient // we register that service with Eureka for flexibility purpose. Although its not required as we use LoadBalancerClient
+//@EnableDiscoveryClient// not needed as we are looking to use Ribbon backed Rest Query //https://examples.javacodegeeks.com/enterprise-java/spring/spring-cloud-feign-client-example/
 @SpringBootApplication
 @EnableJpaAuditing
 public class VehiclesApiApplication {

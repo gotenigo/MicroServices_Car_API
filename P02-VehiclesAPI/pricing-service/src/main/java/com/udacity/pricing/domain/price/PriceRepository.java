@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 // How to customize Spring Data ? https://docs.spring.io/spring-data/rest/docs/current-SNAPSHOT/reference/html/#reference
 //How to customize JPA Query ? https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference
 //INSERT INTO price (vehicleId, currency, price) VALUES (1, 'USD',13402.83);
-//@Repository
 @RepositoryRestResource(path = "price")
 public interface PriceRepository extends CrudRepository<Price, Long> {
 
@@ -24,8 +23,7 @@ public interface PriceRepository extends CrudRepository<Price, Long> {
     //@Query(value ="select d.vehicleId, d.currency, d.price from Price d where d.vehicleId = :vehicleId")
     Price findPriceByVehicleId( @Param("vehicleId") Long vehicleId); // http://localhost:8082/services/price/4
 
-    @Query(value ="select d.vehicleId, d.currency, d.price from Price d")
-    //@RestResource(path = "test") // http://localhost:8082/services/search/test
+    @Query(value ="select d.vehicleId, d.currency, d.price from Price d") // http://localhost:8082/services/search/test
     Stream<Price> findAllPrice();
 
     @Query(value ="select d.vehicleId, d.currency, d.price from Price d where d.currency=?1")

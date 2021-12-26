@@ -24,7 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
  *  !! No need to have a controller or a Service with Spring Data Rest
  **/
 //http://localhost:8082/services/price?vehicleId=18
-//@RestController
+//@RestController  // We are using SPING DATA, so this no longer needed. So we can remove the annotation to register with Spring
 //@RequestMapping("/services/price")
 public class PricingController {
 
