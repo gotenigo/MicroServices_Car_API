@@ -37,7 +37,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Location API",
-                "This API returns a list of airport locations.",
+                "This API returns a list of car + price.",
                 "1.0",
                 "http://www.LeGG.com/ggHome",
                 new Contact("Gothard GOTENI", "www.LeGG.com", "myemail@gg.com"),

@@ -1,0 +1,34 @@
+    /**************
+     *
+     *
+     {
+     "id": 1,
+     "condition": "USED",
+     "details": {
+     "body": "sport",
+     "model": "Z4",
+     "manufacturer": {
+     "code": 103,
+     "name": "BMW"
+     },
+     "numberOfDoors": 2,
+     "fuelType": "Gasoline",
+     "engine": "3.6L V6",
+     "mileage": 32280,
+     "modelYear": 2018,
+     "productionYear": 2018,
+     "externalColor": "white"
+     },
+     "location": {
+     "lat": 40.73061,
+     "lon": -73.935242,
+     "address": "13 adela avenue",
+     "city": "London",
+     "state": "New malden",
+     "zip": "KT36LF"
+     },
+     "price": 13253
+     }
+
+
+     * */

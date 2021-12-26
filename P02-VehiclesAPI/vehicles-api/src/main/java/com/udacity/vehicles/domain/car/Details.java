@@ -23,7 +23,7 @@ public class Details {
     //https://www.baeldung.com/jpa-join-column
     @NotNull
     //@JoinColumn(name="name",referencedColumnName="name",  nullable=false) // We can FK KEY link with field name of Object Manufacturer
-    @ManyToOne // This annocation tells Spring to link "manufacturer" against another object called Manufacturer
+    @ManyToOne // This annotation tells Spring to link "manufacturer" against another object called Manufacturer. it after  the SQL query
     private Manufacturer manufacturer;
 
     private Integer numberOfDoors;

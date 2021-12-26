@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping(path="/cars" , produces = { "application/json" } ) // consume all Media TYpe
+@RequestMapping(path="/cars" , produces = { "application/json" } ) // Force the output format to JSON. ALso help to workaround issue with the some browser that does not specify the Media TYpe on GET
 class CarController {
 
 
@@ -97,11 +97,7 @@ class CarController {
      * @return all information for the requested vehicle
      */
     //You can also change the Media Type supported on your GET
-    // Look more here https://stackoverflow.com/questions/57970995/can-spring-boot-controller-receive-plain-text
-    //https://stackoverflow.com/questions/57970995/can-spring-boot-controller-receive-plain-text
-    //pring supports all media types as per the IANA https://www.iana.org/assignments/media-types/media-types.xhtml the problem lies only with the curl command as quoted by others.
     //https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc
-    //https://www.baeldung.com/spring-requestmapping
     @GetMapping("/{id}")
     Resource<Car> get(@PathVariable Long id) {
         /**
@@ -109,7 +105,7 @@ class CarController {
          * TODO: Use the `assembler` on that car and return the resulting output.
          *   Update the first line as part of the above implementing.
          */
-        System.out.println("...GG dit are inside GEt  car per Id : "+id);
+        System.out.println("=> we are inside GEt  Car with Id : "+id);
         return assembler.toResource(carService.findById(id)/*carService.getCarView()*/);
     }
 
@@ -132,7 +128,7 @@ class CarController {
          *   Update the first line as part of the above implementing.
          */
 
-        System.out.println("....................................>We are in the post() Car");
+        System.out.println("=>We are in the post() Car");
 
         Car vcar = carService.save(car); // we save car into thr database via CarRepository that uses JPA (Crud)
 
@@ -144,40 +140,6 @@ class CarController {
 
 
 
-    /**************
-     *
-     *
-     {
-     "id": 1,
-     "condition": "USED",
-     "details": {
-     "body": "sport",
-     "model": "Z4",
-     "manufacturer": {
-     "code": 103,
-     "name": "BMW"
-     },
-     "numberOfDoors": 2,
-     "fuelType": "Gasoline",
-     "engine": "3.6L V6",
-     "mileage": 32280,
-     "modelYear": 2018,
-     "productionYear": 2018,
-     "externalColor": "white"
-     },
-     "location": {
-     "lat": 40.73061,
-     "lon": -73.935242,
-     "address": "13 adela avenue",
-     "city": "London",
-     "state": "New malden",
-     "zip": "KT36LF"
-     },
-     "price": 13253
-     }
-
-
-     * */
 
 
 
@@ -201,7 +163,7 @@ class CarController {
          *   Update the first line as part of the above implementing.
          */
 
-        System.out.println("....................................>We are in the put() Car");
+        System.out.println("=.>We are in the put() Car");
 
         car.setId(id);
         carService.save(car); // we save car into thr database via CarRepository that uses JPA (Crud)
@@ -224,7 +186,7 @@ class CarController {
          * TODO: Use the Car Service to delete the requested vehicle.
          */
 
-        System.out.println("....................................>We are in the delete() Car");
+        System.out.println("=>We are in the delete() Car");
 
         carService.delete(id);
 

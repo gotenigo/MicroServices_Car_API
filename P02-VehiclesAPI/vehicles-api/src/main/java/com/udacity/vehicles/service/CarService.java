@@ -41,9 +41,6 @@ public class CarService {
          * TODO: Add the Maps and Pricing Web Clients you create
          *   in `VehiclesApiApplication` as arguments and set them here.
          */
-        //example of auto wire
-        //https://www.baeldung.com/spring-bean-names
-        //https://www.logicbig.com/tutorials/spring-framework/spring-core/inject-bean-by-name.html
         this.repository = repository;
         this.priceClient= new PriceClient(pricingWebClient);
         this.mapsClient = new MapsClient(mapsWebClient, modelMapper);
@@ -103,20 +100,10 @@ public class CarService {
         //................................................................................
         //http://localhost:8082/services/price/4
         //http://localhost:8082/services/price/search/findPriceByVehicleId?vehicleId=1
-        //................................................................................
-        /*Price price = pricingWebClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/services/price/"+id)
-                        //.queryParam("vehicleId", id)
-                        .build())
-                .retrieve()
-                .bodyToMono(Price.class)
-                .block();*/
+
 
 
         String price = priceClient.getPrice(id );
-
-        // Combine the monos: when they are both done, take the
-        // data from each and combine it into a User object.
         car.setPrice(price);
 
 
@@ -164,8 +151,8 @@ public class CarService {
 
         if (car.getId() != null) {
 
-            System.out.println("GG.........CardID provided, So I will try to update wha twe have");
-            System.out.println("GG.........Please note!!! Only car details + Location would be Updated !");
+            System.out.println("=>.........CardID provided, So I will try to update wha twe have");
+            System.out.println("=>.........Please note!!! Only car details + Location would be Updated !");
 
             return repository.findById(car.getId()) // return an Optional<T>, so probably here Optional< List<Car> > so we can use map (there must be a Stream here)
                     .map(carToBeUpdated -> {    // As part of the Lambda expression .map( x -> { doDomeTHing; });  x is the object representing class T (i.e Car)
@@ -180,7 +167,7 @@ public class CarService {
                     }).orElseThrow(CarNotFoundException::new);
         }else {
 
-            System.out.println("GG.........I CANT find this car ID, so I will create a new one");
+            System.out.println("=>.........I CANT find this car ID, so I will create a new one");
 
             vCar= repository.save(car);
 
@@ -227,7 +214,7 @@ public class CarService {
         /**
          * TODO: Delete the car from the repository.
          */
-        System.out.println("....................................->trying tp delete in Service the car : "+car.toString());
+        System.out.println("=>....................................->trying tp delete in Service the car : "+car.toString());
 
         repository.deleteById(car.getId());
 
