@@ -169,7 +169,7 @@ class CarController {
         carService.save(car); // we save car into thr database via CarRepository that uses JPA (Crud)
 
         Resource<Car> resource = assembler.toResource(car);
-        return ResponseEntity.ok(resource);
+        return ResponseEntity.ok(resource); // we return the status OK with the created status Entity
     }
 
 

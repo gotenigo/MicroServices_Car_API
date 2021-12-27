@@ -12,9 +12,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -112,6 +110,7 @@ public class CarControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isCreated()); // We check/set the expectation to validate test
+                //. A 201 status code indicates that a request was successful and as a result, a resource has been created (for example a new page).
     }
 
     /**
@@ -178,6 +177,38 @@ public class CarControllerTest {
         verify(carService, times(1)).delete(1L); // Check delete is called OK
 
     }
+
+
+
+
+    /**
+     * Tests the update of a single car by ID.
+     * @throws Exception if the update operation of a vehicle fails
+     */
+    @Test
+    public void updateCar() throws Exception {
+        /**
+         * TODO: Add a test to check whether a vehicle is appropriately updated
+         *   when the `save` method is called from the Car Controller. This
+         *   should utilize the car from `getCar()` below.
+         */
+
+        Car car = getCar();
+        car.setCondition(Condition.NEW); // changing condition
+        car.getDetails().setExternalColor("Black"); // changing colour
+        String Id="1";
+        mvc.perform(
+                        put(new URI("/cars/"+Id))
+                                .content(json.write(car).getJson()) // Add body to the HTTP Put request
+                                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()); // We check/set the expectation to validate test
+
+    }
+
+
+
+
 
     /**
      * Creates an example Car object for use in testing.
