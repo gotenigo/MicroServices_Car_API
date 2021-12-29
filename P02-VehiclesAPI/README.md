@@ -1,6 +1,6 @@
-# ND035-P02-VehiclesAPI-Project
+# MicroServices_Car_API
 
-Project repository for JavaND Project 2, where students implement a Vehicles API using Java and Spring Boot that can communicate with separate location and pricing services.
+Project repository for JavaND Project 2, where a Vehicles API using Java and Spring Boot that can communicate with separate location and pricing services via Eureka netflix
 
 ## Instructions
 
