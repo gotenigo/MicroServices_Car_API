@@ -1,6 +1,6 @@
 # MicroServices_Car_API
 
-Project repository for JavaND Project 2, where a Vehicles API using Java and Spring Boot that can communicate with separate location and pricing services via Eureka netflix
+Project repository for JavaND Project 2, where a Vehicles API using Java and Spring Boot that can communicate with separate location and pricing services via Eureka netflix. APi doc could also be explored via swagger / OpenAPI
 
 ## Instructions
 
